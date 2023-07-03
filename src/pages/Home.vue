@@ -20,7 +20,9 @@
     <div class="album py-5 bg-body-tertiary">
       <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-          <Card v-for="(item, i) in state.items" :key="i" />
+          <div class="col" v-for="(item, i) in state.items" :key="i">
+            <Card :item="item" />
+          </div>
         </div>
       </div>
     </div>
