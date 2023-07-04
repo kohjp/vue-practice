@@ -9,6 +9,7 @@
         id="floatingInput"
         placeholder="name@example.com"
         v-model="state.form.email"
+        @keyup.enter="submit"
       />
       <label for="floatingInput">Email address</label>
     </div>
@@ -19,6 +20,7 @@
         id="floatingPassword"
         placeholder="Password"
         v-model="state.form.password"
+        @keyup.enter="submit"
       />
       <label for="floatingPassword">Password</label>
     </div>
