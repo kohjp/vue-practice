@@ -14,7 +14,9 @@
           <div class="col-md-5 col-lg-4 order-md-last">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
               <span class="text-primary">구입 목록</span
-              ><span class="badge bg-primary rounded-pill">3</span>
+              ><span class="badge bg-primary rounded-pill">{{
+                state.items.length
+              }}</span>
             </h4>
             <ul class="list-group mb-3">
               <li
@@ -39,7 +41,7 @@
           </div>
           <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">주문자 정보</h4>
-            <form class="needs-validation" novalidate="">
+            <div class="needs-validation" novalidate="">
               <div class="row g-3">
                 <div class="col-12">
                   <label for="username" class="form-label">이름</label>
@@ -49,7 +51,7 @@
                       class="form-control"
                       id="username"
                       placeholder="Username"
-                      required=""
+                      v-model="state.form.name"
                     />
                     <div class="invalid-feedback">
                       Your username is required.
@@ -62,8 +64,7 @@
                     type="text"
                     class="form-control"
                     id="address"
-                    placeholder="1234 Main St"
-                    required=""
+                    v-model="state.form.address"
                   />
                   <div class="invalid-feedback">
                     Please enter your shipping address.
@@ -75,37 +76,36 @@
               <div class="my-3">
                 <div class="form-check">
                   <input
-                    id="credit"
+                    id="card"
                     name="paymentMethod"
                     type="radio"
                     class="form-check-input"
                     checked=""
-                    required=""
-                  /><label class="form-check-label" for="credit"
-                    >신용카드</label
-                  >
+                    v-model="state.form.payment"
+                    value="card"
+                  /><label class="form-check-label" for="card">신용카드</label>
                 </div>
                 <div class="form-check">
                   <input
-                    id="debit"
+                    id="npay"
                     name="paymentMethod"
                     type="radio"
                     class="form-check-input"
-                    required=""
-                  /><label class="form-check-label" for="debit"
+                    v-model="state.form.payment"
+                    value="npay"
+                  /><label class="form-check-label" for="npay"
                     >네이버페이</label
                   >
                 </div>
                 <div class="form-check">
                   <input
-                    id="paypal"
+                    id="bank"
                     name="paymentMethod"
                     type="radio"
                     class="form-check-input"
-                    required=""
-                  /><label class="form-check-label" for="paypal"
-                    >계좌이체</label
-                  >
+                    v-model="state.form.payment"
+                    value="bank"
+                  /><label class="form-check-label" for="bank">계좌이체</label>
                 </div>
               </div>
               <div class="row gy-3">
@@ -116,16 +116,20 @@
                     class="form-control"
                     id="cc-name"
                     placeholder=""
-                    required=""
+                    v-model="state.form.cardNumber"
                   />
                   <div class="invalid-feedback">Name on card is required</div>
                 </div>
               </div>
               <hr class="my-4" />
-              <button class="w-100 btn btn-primary btn-lg" type="submit">
+              <button
+                class="w-100 btn btn-primary btn-lg"
+                type="click"
+                @click="submit"
+              >
                 결제하기
               </button>
-            </form>
+            </div>
           </div>
         </div>
       </main>
@@ -142,11 +146,26 @@ export default {
   setup() {
     const state = reactive({
       items: [],
+      form: {
+        name: "",
+        address: "",
+        payment: "",
+        cardNumber: "",
+        items: "",
+      },
     });
 
     const load = () => {
       axios.get("/api/cart/items").then((res) => {
         state.items = res.data;
+      });
+    };
+
+    const submit = () => {
+      const args = JSON.parse(JSON.stringify(state.form));
+      args.items = JSON.stringify(state.items);
+      axios.post("/api/orders", args).then(() => {
+        console.log("success");
       });
     };
 
@@ -160,7 +179,7 @@ export default {
       return result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     });
 
-    return { state, computedPrice };
+    return { state, computedPrice, submit };
   },
 };
 </script>
