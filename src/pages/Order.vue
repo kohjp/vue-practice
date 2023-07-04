@@ -4,11 +4,6 @@
       <main>
         <div class="py-5 text-center">
           <h2>주문하기</h2>
-          <p class="lead">
-            Below is an example form built entirely with Bootstrap’s form
-            controls. Each required form group has a validation state that can
-            be triggered by attempting to submit the form without completing it.
-          </p>
         </div>
         <div class="row g-5">
           <div class="col-md-5 col-lg-4 order-md-last">
@@ -26,7 +21,7 @@
               >
                 <div>
                   <h6 class="my-0">{{ i.name }}</h6>
-                  <small class="text-body-secondary">Brief description</small>
+                  <small class="text-body-secondary">미술품</small>
                 </div>
                 <span class="text-body-secondary">
                   {{
