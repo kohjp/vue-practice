@@ -7,7 +7,9 @@
         <small class="discount badge bg-danger">{{ item.discountPer }}%</small>
       </p>
       <div class="d-flex justify-content-between align-items-center">
-        <button class="btn btn-primary">구입하기</button>
+        <button class="btn btn-primary" @click="addToCart(item.id)">
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+        </button>
         <small class="price text-body-secondary"
           >{{
             item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -26,10 +28,19 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Card",
   props: {
     item: Object,
+  },
+  setup() {
+    const addToCart = (itemId) => {
+      axios.post(`/api/cart/items/${itemId}`).then(() => {
+        console.log("success");
+      });
+    };
+    return { addToCart };
   },
 };
 </script>
